@@ -80,7 +80,11 @@ glab release create vX.Y.Z --name vX.Y.Z --notes-file notes.md
 ```
 
 Without API access, give the user the notes and the path: **Deploy → Releases →
-New release**, pick the tag. A ready-to-edit script:
+New release**, pick the tag. This is a normal setup, not a gap to work around:
+many client projects give no personal token and want no release job in CI, so
+the agent's job is to hand over notes ready to paste, one block per version.
+A CI job with `release:` (CI_JOB_TOKEN) is an option to *offer*, never to add
+unasked. A ready-to-edit script:
 [`templates/create-release.sh`](templates/create-release.sh).
 
 ### 6. Check what the tag triggered
