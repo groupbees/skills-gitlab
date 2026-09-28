@@ -1,0 +1,44 @@
+---
+# A Python (uv) service published as a container image, on shared CI/CD
+# catalog components. Branches and main build a nightly image tagged with the
+# short SHA; a vX.Y.Z tag promotes it to the release registry.
+# Replace every <...>; keep the comments that explain a non-default input.
+
+stages:
+  - dependencies
+  - test
+  - build
+  - security
+  - promote
+  - Doc
+
+include:
+  - component: $CI_SERVER_FQDN/<group>/cicd-catalog/python/pipeline@3
+    inputs:
+      SCOPE: <runner-scope>
+      PACKAGE_MANAGER: "uv"
+      # Pinned to the uv the Dockerfile installs, so the lock reads the same.
+      UV_VERSION: "0.8.12"
+      PYTHON_VERSION: "3.13"
+      # No src/ layout: the package sits at the repository root. This is what
+      # ruff checks and what coverage measures.
+      APP_SRC_DIR: "<package_name>"
+      PYTHON_LINTER: "ruff"
+      ENABLE_PYTEST: true
+      # ruff check, ruff format --check and pre-commit: hence the hook config
+      # and the pre-commit entry in the dev group.
+      ENABLE_STATIC_ANALYSIS: true
+      # The component manages the SonarCloud project itself (key derived from
+      # this project's path) and keeps the job non-blocking.
+      SONAR_AUTO: "optional"
+
+  - component: $CI_SERVER_FQDN/<group>/cicd-catalog/docker/pipeline@1
+    inputs:
+      SCOPE: <runner-scope>
+      DOCKER_IMAGE_NAME: "<image-name>"
+      TARGET_BU_ARTIFACT_REGISTRY: "<scope>"
+      BUILD_ARG_NAMES: "DOCKER_HUB_MIROR"
+
+variables:
+  # Artifact Registry remote repository fronting Docker Hub.
+  DOCKER_HUB_MIROR: <region>-docker.pkg.dev/<artifacts-project>/remote-dockerhub-repository

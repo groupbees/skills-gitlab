@@ -1,0 +1,4 @@
+{
+  "name": "skills-gitlab",
+  "description": "GitLab and GitLab CI/CD conventions for client engagements hosted on GitLab — Conventional Commits, merge requests, SemVer tags and Releases, and pipelines built on shared CI/CD catalog components."
+}

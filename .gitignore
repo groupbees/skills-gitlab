@@ -1,0 +1,19 @@
+# JetBrains IDE
+.idea/
+*.iml
+
+# Python / virtual envs
+__pycache__/
+*.py[cod]
+.venv/
+.direnv/
+
+# Node (skill tooling)
+node_modules/
+
+# OS junk
+.DS_Store
+
+# Skills deployed into this repo by `skillmgr update` (see skillmgr.yaml)
+.claude/skills/
+.agents/skills/
