@@ -81,6 +81,9 @@ Hard constraints (git and GitLab, not the skill):
 2. **No newline in an option value.** Encode the description as **one line of
    HTML** (`<h3>`, `<ul><li>`, `<code>`, `<table>`); Markdown headings do not
    render without newlines. Escape literal `<` / `>` as `&lt;` / `&gt;`.
+   Task lists do not survive: `<li>[x] ...</li>` shows the text `[x]`, not a
+   checkbox. When the checklist matters, paste the Markdown version in the UI
+   after creation.
 3. **The description cannot be changed this way later.** Edit it in the UI or
    with B/C.
 
