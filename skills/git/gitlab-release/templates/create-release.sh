@@ -19,7 +19,7 @@ LAST=$(git describe --tags --abbrev=0 origin/main 2>/dev/null || true)
 echo "Commits since ${LAST:-the beginning}:"
 git log --oneline "${LAST:+$LAST..}origin/main"
 
-git tag -a "$VERSION" origin/main -F "$NOTES_FILE"
+git tag -a "$VERSION" origin/main -m "$VERSION"   # one line: the notes go in the Release
 git push origin "$VERSION"
 
 if command -v glab >/dev/null && glab auth status >/dev/null 2>&1; then

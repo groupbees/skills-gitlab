@@ -63,9 +63,13 @@ pin to bump, a config key to add). English.
 ### 4. Tag
 
 ```bash
-git tag -a vX.Y.Z origin/main -F notes.md    # annotated, from main, notes as message
-git push origin vX.Y.Z                       # SSH, no token needed
+git tag -a vX.Y.Z origin/main -m "vX.Y.Z - <one line on what it is>"   # annotated, from main
+git push origin vX.Y.Z                                                  # SSH, no token needed
 ```
+
+Keep the tag message to one line: the notes live in the Release (step 5), and a
+tag message cannot be edited later without deleting and re-pushing the tag. Put
+the full notes in the message only when no Release will be created.
 
 ### 5. Attach the GitLab Release
 
