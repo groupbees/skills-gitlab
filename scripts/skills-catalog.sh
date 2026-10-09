@@ -2,7 +2,7 @@
 #
 # skills-catalog.sh — Catalog tooling for a GroupBees skills module.
 #
-# Installing skills is skillmgr's job (see skillmgr.yaml and the README); this
+# Installing skills is pollen's job, in the consumer's pollen.yaml; this
 # script only reads the catalog: it lists the skills, keeps the README table in
 # sync with the SKILL.md descriptions, and guards leaf-name uniqueness (skills
 # deploy flat, so skills/<domain>/<name> must be unique on <name> alone).
@@ -100,11 +100,12 @@ case "$MODE" in
     exit 1
     ;;
   --check-names)
-    dups="$(find "$SKILLS_SRC" -type f -name SKILL.md -exec dirname {} \; \
-      | xargs -n1 basename | sort | uniq -d)"
+    # skills/<domain>/<name>/SKILL.md → <name> is the second-to-last field.
+    dups="$(find "$SKILLS_SRC" -type f -name SKILL.md \
+      | awk -F/ '{ print $(NF-1) }' | sort | uniq -d)"
     if [[ -n "$dups" ]]; then
       echo "❌ Leaf skill names must be unique across domains (they deploy flat):" >&2
-      sed 's/^/   /' <<< "$dups" >&2
+      while IFS= read -r d; do echo "   $d" >&2; done <<< "$dups"
       exit 1
     fi
     echo "✅ Every skill name is unique."

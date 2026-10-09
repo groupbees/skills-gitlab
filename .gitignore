@@ -14,6 +14,5 @@ node_modules/
 # OS junk
 .DS_Store
 
-# Skills deployed into this repo by `skillmgr update` (see skillmgr.yaml)
-.claude/skills/
-.agents/skills/
+# Throwaway pollen configs (CI validation, local preview): modules ship none
+/.pollen-*.yaml

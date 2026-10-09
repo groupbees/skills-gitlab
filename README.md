@@ -1,31 +1,30 @@
 # 🐝 skills-gitlab
 
-> GitLab and GitLab CI/CD conventions for client engagements hosted on GitLab — the `skills-gitlab` module of the GroupBees skills catalog.
+> GitLab and GitLab CI/CD conventions for projects hosted on GitLab — Conventional Commits, merge requests, SemVer tags and Releases, pipelines on shared CI/CD components — the `skills-gitlab` module of the GroupBees skills catalog.
 
 ## 🎯 Purpose
 
-This repo is the source of truth for its skills — **one module** alongside
-`skills-core` (transverse) and the others. Each skill is a standard **Agent
+This repo is the source of truth for its skills — **one module**, composed
+with others in a consumer's `pollen.yaml`. Each skill is a standard **Agent
 Skill** (`SKILL.md`, the [agentskills.io](https://agentskills.io) open standard),
 read natively by **Claude Code**, **GitHub Copilot** and **Cursor**.
 
 ## 🚀 Usage
 
-Install with [skillmgr](https://github.com/groupbees/skillmgr): add this module
-to your project's `skillmgr.yaml`, pinned to a release, then `skillmgr update`.
+Install with [pollen](https://github.com/groupbees/pollen): add this module to
+your project's `pollen.yaml` (or to `~/.config/pollen/pollen.yaml` for every
+project, `pollen update -g`), then run `pollen update`.
 
 ```yaml
-repos:
   - repo: https://github.com/groupbees/skills-gitlab
-    revision: vX.Y.Z
+    revision: vX.Y.Z   # then `pollen autoupdate --freeze` pins its commit
     paths:
       - path: skills
         recurse: true
 ```
 
-It deploys into `.claude/skills/` (Claude Code) and `.agents/skills/` (Copilot,
-Cursor, Codex…). Skill names must be **unique across modules**. See
-[AGENTS.md](AGENTS.md).
+Everything else about pollen — pinning, updates, errors — is in its docs and in
+the `pollen` skill it ships (add `groupbees/pollen` with `path: skills`).
 
 ## 📋 Skills Catalog
 
@@ -42,13 +41,14 @@ Cursor, Codex…). Skill names must be **unique across modules**. See
 
 ## ✅ CI
 
-[`.github/workflows/ci.yml`](.github/workflows/ci.yml): `skill-validator check
---strict`, `skillmgr validate`, the generated README table, and
-`shellcheck scripts/*.sh`.
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml) calls the shared
+`skills-module` workflow of `groupbees/.github`: `skill-validator check
+--strict`, `pollen validate`, the generated README table, and
+`shellcheck` on every `*.sh`.
 
 ## 🏷️ Versioning
 
-Repo-wide git tags (`vX.Y.Z`) cut with `tag-groupbees`; the GitHub Releases page
+Repo-wide git tags (`vX.Y.Z`) cut with `tag-opensource`; the GitHub Releases page
 is the changelog.
 
 ## 🤝 Contributing

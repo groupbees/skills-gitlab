@@ -73,18 +73,31 @@ Rules enforced by CI ([`skill-validator`](https://github.com/agent-ecosystem/ski
 - [ ] Checked for overlap with `scripts/skills-catalog.sh --list` (extend, don't duplicate)
 - [ ] `SKILL.md` frontmatter has only `name` (= folder name) + `description`
 - [ ] The skill name is unique across all domains **and all modules**
-- [ ] `skillmgr validate` and `scripts/skills-catalog.sh --check-names` pass (CI runs them too)
+- [ ] `pollen validate` and `scripts/skills-catalog.sh --check-names` pass (CI runs them too)
 - [ ] Regenerated the README table: `scripts/skills-catalog.sh --readme`
 - [ ] `skill-validator check --strict --allow-dirs=templates skills/` passes
 - [ ] Templates (if any) are functional and tested
 
-### 4. Review process
+### 4. Preview a skill before releasing it
+
+A module ships no `pollen.yaml` (consumers own theirs), so write a throwaway one
+at the root — `repo: local` resolves against the config's directory — and deploy
+into a scratch directory, never into your real skills:
+
+```bash
+printf 'repos:\n  - repo: local\n    paths:\n      - path: skills\n        recurse: true\n' > .pollen-preview.yaml
+pollen validate --config .pollen-preview.yaml
+pollen update --config .pollen-preview.yaml --target /tmp/skills-preview
+rm .pollen-preview.yaml          # gitignored anyway (/.pollen-*.yaml)
+```
+
+### 5. Review process
 
 1. Branch: `feat/skills/<domain>/<skill-name>`
 2. Add/modify the skill
-3. Open the PR with the [`pr-groupbees`](https://github.com/groupbees/skills-core/blob/main/skills/git/pr-groupbees/SKILL.md)
-   conventions (Summary / What changed / Test plan, labels for release notes)
-4. Squash-merge after approval
+3. Open the PR with the `pr-groupbees` conventions (Summary / What changed / Test plan)
+4. Merge after approval: squash by default, rebase-merge when every commit
+   is a clean, self-contained step
 
 ## Versioning
 
@@ -94,18 +107,17 @@ Anthropic / Google skill repos). Versioning is **catalog-wide, via git tags**:
 
 - The **repo commit** is the working version; consumers should not track it.
 - Releases are catalog-wide semver tags (`vX.Y.Z`) cut with
-  [`tag-groupbees`](https://github.com/groupbees/skills-core/blob/main/skills/git/tag-groupbees/SKILL.md).
+  `tag-opensource`.
 - The **GitHub Releases page is the changelog** — no hand-maintained
   `CHANGELOG.md` to keep in sync.
-- To **pin**, a consumer sets `revision: vX.Y.Z` in its `skillmgr.yaml` — a
-  branch there floats (skillmgr has no lockfile yet).
+- Consumers pin a release in their `pollen.yaml` — how is in the `pollen`
+  skill.
 
 ## Naming conventions
 
 - **Folders / skill names**: `kebab-case`, unique across domains *and* modules
   (they install flat and map to a single `/<name>`)
-- **Domains**: `git` (commits, merge requests, releases), `cicd` (GitLab CI)
+- **Domains**: `git`, `cicd` (add one when a skill doesn't fit)
 - **Branches**: `feat/skills/<domain>/<name>`, `fix/skills/<domain>/<name>`
 - **Commits**: descriptive titles, no Conventional Commits prefix, no
-  `Co-Authored-By` trailer — see
-  [`commit-groupbees`](https://github.com/groupbees/skills-core/blob/main/skills/git/commit-groupbees/SKILL.md)
+  `Co-Authored-By` trailer — see `commit-groupbees`
