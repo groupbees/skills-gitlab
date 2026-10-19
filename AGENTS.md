@@ -13,7 +13,8 @@ The source of truth for GroupBees' GitLab conventions, used on client engagement
 GroupBees skills catalog. A skill is a standard
 **Agent Skill** (`SKILL.md`, the [agentskills.io](https://agentskills.io) open
 standard): `skills/<domain>/<name>/SKILL.md` — YAML frontmatter with `name` +
-`description`, then the instructions body — plus the spec's optional `scripts/`, `references/` and `assets/` folders.
+`description`, then the instructions body — plus the spec's optional `scripts/`, `references/` and `assets/` folders
+(see *Anatomy of a skill*).
 
 The same `SKILL.md` format is read natively by Claude Code, GitHub Copilot and
 Cursor, so there is **one format and one install path**, no per-tool conversion.
@@ -65,10 +66,32 @@ with `pollen update`.
   4. `shellcheck` on every `*.sh`.
 - **No per-skill `README.md`.** The validator flags extra files at a skill root,
   and duplicated docs rot: the human docs ARE `SKILL.md`.
-- **Spec folders only**: `scripts/` (code the agent runs, never loaded in
-  context), `references/` (docs read on demand — link each from `SKILL.md` and
-  say *when* to read it), `assets/` (files copied into the output: templates,
-  configs). CI rejects any other folder.
+
+## Anatomy of a skill (Agent Skills)
+
+Every skill follows the [Agent Skills](https://agentskills.io) layout — one
+required file, three optional folders, nothing else (CI passes
+`allow-dirs: ""`):
+
+```
+skills/<domain>/<name>/
+├── SKILL.md       # Required: frontmatter (name = folder name, description) + instructions
+├── scripts/       # Code the agent runs; only its output enters the context
+├── references/    # Docs the agent reads only when SKILL.md says so
+└── assets/        # Complete files copied into the project, then adapted
+```
+
+| Put it in | When | e.g. |
+|-----------|------|------|
+| `SKILL.md` | Rules and decisions needed every time the skill triggers (keep it under ~500 lines) | non-root user, alpine vs slim |
+| `references/` | Detail needed only in some cases — one topic per file, linked from `SKILL.md` with *when* to read it | one Dockerfile per language |
+| `assets/` | A complete file the output starts from | `Dockerfile`, `ci-cd.yml` |
+| `scripts/` | A deterministic check or action — better run than described | a pre-tag checklist |
+
+Loading is progressive: `name` + `description` always, `SKILL.md` when the
+skill triggers, the folders only on demand. Link every bundled file from
+`SKILL.md` (the validator flags unreferenced files), and keep gotchas in
+`SKILL.md` itself: the agent must see them without looking.
 
 ## Before adding a NEW skill — check for overlap
 
