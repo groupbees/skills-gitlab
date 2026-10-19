@@ -50,7 +50,7 @@ be where you learn the repository is missing a file.
 
 ## Worked example — Python (uv) + Docker
 
-[`templates/gitlab-ci.python-uv-docker.yml`](templates/gitlab-ci.python-uv-docker.yml)
+[`assets/gitlab-ci.python-uv-docker.yml`](assets/gitlab-ci.python-uv-docker.yml)
 is a complete file. What each part required, from a real setup:
 
 | Component job | Runs | Repository must provide |
@@ -73,7 +73,7 @@ dev = ["ruff", "pre-commit", { include-group = "test" }]
 ```
 
 A `.pre-commit-config.yaml` with **local** hooks, so nothing is fetched at hook
-time: [`templates/pre-commit-config.yaml`](templates/pre-commit-config.yaml).
+time: [`assets/pre-commit-config.yaml`](assets/pre-commit-config.yaml).
 
 Replay the jobs before the first push:
 

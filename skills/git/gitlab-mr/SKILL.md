@@ -87,7 +87,7 @@ Hard constraints (git and GitLab, not the skill):
 3. **The description cannot be changed this way later.** Edit it in the UI or
    with B/C.
 
-A ready-to-edit script: [`templates/create-mr-pushopts.sh`](templates/create-mr-pushopts.sh).
+A ready-to-edit script: [`scripts/create-mr-pushopts.sh`](scripts/create-mr-pushopts.sh).
 
 ## Methods B and C
 
