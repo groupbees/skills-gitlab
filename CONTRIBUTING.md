@@ -22,10 +22,10 @@ whose only required file is `SKILL.md`:
 
 ```
 skills/<domain>/<skill-name>/
-├── SKILL.md            # Required: the Agent Skill (name + description + body)
-└── templates/          # Optional: bundled resources the skill uses
-    ├── example.py
-    └── ...
+├── SKILL.md            # Required: name + description + instructions
+├── scripts/            # Optional: code the agent runs (not loaded in context)
+├── references/         # Optional: docs read only when SKILL.md says so
+└── assets/             # Optional: files copied into the output (templates, configs)
 ```
 
 No per-skill `README.md` (the validator flags extra files at a skill root, and a
@@ -64,8 +64,8 @@ Rules enforced by CI ([`skill-validator`](https://github.com/agent-ecosystem/ski
 - `name`: 1–64 chars, lowercase `a-z 0-9` and hyphens, no leading/trailing/double
   hyphen, and **must equal the folder name**.
 - `description`: 1–1024 chars, non-empty, no keyword stuffing.
-- Keep `SKILL.md` under ~500 lines / 5 000 tokens; move long reference material
-  into `templates/` (or a referenced file) and tell the agent *when* to load it.
+- Keep `SKILL.md` under ~500 lines / 5 000 tokens; move detail into
+  `references/` (one topic per file) and tell the agent *when* to read it.
 - Links must resolve, and no orphan files at the skill root.
 
 ### 3. Pre-merge checklist
@@ -75,8 +75,8 @@ Rules enforced by CI ([`skill-validator`](https://github.com/agent-ecosystem/ski
 - [ ] The skill name is unique across all domains **and all modules**
 - [ ] `pollen validate` and `scripts/skills-catalog.sh --check-names` pass (CI runs them too)
 - [ ] Regenerated the README table: `scripts/skills-catalog.sh --readme`
-- [ ] `skill-validator check --strict --allow-dirs=templates skills/` passes
-- [ ] Templates (if any) are functional and tested
+- [ ] `skill-validator check --strict skills/` passes
+- [ ] Scripts and assets (if any) are functional and tested
 
 ### 4. Preview a skill before releasing it
 

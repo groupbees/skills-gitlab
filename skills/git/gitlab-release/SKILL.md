@@ -85,7 +85,7 @@ many client projects give no personal token and want no release job in CI, so
 the agent's job is to hand over notes ready to paste, one block per version.
 A CI job with `release:` (CI_JOB_TOKEN) is an option to *offer*, never to add
 unasked. A ready-to-edit script:
-[`templates/create-release.sh`](templates/create-release.sh).
+[`scripts/create-release.sh`](scripts/create-release.sh).
 
 ### 6. Check what the tag triggered
 
